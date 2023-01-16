@@ -6,10 +6,11 @@ from grape_quiz.serializers import (
     GroupSerializer, 
     QuizSerializer, 
     QuestionSerializer, 
-    AnswerSerializer
+    AnswerSerializer,
+    QuizAcknowledgmentSerializer
 )
 from rest_framework_extensions.mixins import NestedViewSetMixin
-from grape_quiz.models import Quiz, Question, Answer
+from grape_quiz.models import Quiz, Question, Answer, QuizAcknowledgment
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -27,19 +28,24 @@ class GroupViewSet(viewsets.ModelViewSet):
 class QuizViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Quiz.objects.all().order_by('id')
     serializer_class = QuizSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     lookup_field = 'id'
 
 
 class QuestionViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Question.objects.all().order_by('id')
     serializer_class = QuestionSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     lookup_field = 'id'
 
 
 class AnswerViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Answer.objects.all().order_by('id')
     serializer_class = AnswerSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     lookup_field = 'id'
+
+
+class QuizAcknowledgmentViewSet(viewsets.ModelViewSet):
+    queryset = QuizAcknowledgment.objects.all().order_by('date')
+    serializer_class = QuizAcknowledgmentSerializer

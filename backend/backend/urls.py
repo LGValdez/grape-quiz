@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework_extensions.routers import (
     ExtendedDefaultRouter as DefaultRouter
 )
-from grape_quiz.views import UserViewSet, GroupViewSet, QuizViewSet, QuestionViewSet, AnswerViewSet
+from grape_quiz.views import UserViewSet, GroupViewSet, QuizViewSet, QuestionViewSet, AnswerViewSet, QuizAcknowledgmentViewSet
 
 
 router = DefaultRouter()
@@ -14,6 +14,7 @@ router.register(r'groups', GroupViewSet)
 )
 router.register(r'questions', QuestionViewSet)
 router.register(r'answers', AnswerViewSet)
+router.register(r'quiz-acknowledgement', QuizAcknowledgmentViewSet)
 
 urlpatterns = [
     path('api/v1/', include(router.urls)),

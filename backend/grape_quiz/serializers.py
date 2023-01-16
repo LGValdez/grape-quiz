@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
-from rest_framework.serializers import HyperlinkedModelSerializer, ReadOnlyField, HyperlinkedRelatedField, HyperlinkedIdentityField
-from grape_quiz.models import Quiz, Question, Answer
+from rest_framework.serializers import HyperlinkedModelSerializer, SerializerMethodField, ModelSerializer
+from grape_quiz.models import Quiz, Question, Answer, QuizAcknowledgment
 
 
 class UserSerializer(HyperlinkedModelSerializer):
@@ -27,7 +27,7 @@ class AnswerSerializer(HyperlinkedModelSerializer):
 
 
 class QuestionSerializer(HyperlinkedModelSerializer):
-    answers= AnswerSerializer(many=True, read_only=True)
+    answers = AnswerSerializer(many=True, read_only=True)
     class Meta:
         model = Question
         fields = '__all__'
@@ -38,13 +38,35 @@ class QuestionSerializer(HyperlinkedModelSerializer):
         }
 
 
-class QuizSerializer(HyperlinkedModelSerializer):
-    questions= QuestionSerializer(many=True, read_only=True)
+class AnswerSerializerInQuestion(ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ['id', 'name']
+
+
+class QuestionSerializerInQuiz(ModelSerializer):
+    answers = AnswerSerializerInQuestion(many=True, read_only=True)
+    class Meta:
+        model = Question
+        fields = ['id', 'sequence', 'name', 'answers']
+
+
+class QuizSerializer(ModelSerializer):
+    questions = QuestionSerializerInQuiz(many=True, read_only=True)
     class Meta:
         model = Quiz
-        fields = '__all__'
+        fields = ['id', 'user', 'name', 'code', 'questions']
         lookup_field = 'id'
-        extra_kwargs = {
-            'url': {'lookup_field': 'id'}
-        }
+
+
+class QuizAcknowledgmentSerializer(ModelSerializer):
+    score = SerializerMethodField(source="get_score")
+    class Meta:
+        model = QuizAcknowledgment
+        fields = ['id', 'user', 'quiz_template', 'instance_questions', 'user_answers', 'score', 'date']
+
+    def get_score(self, current_object):
+        question_number = len(current_object.instance_questions.all())
+        correct_answers = sum(int(answer.is_correct) for answer in current_object.user_answers.all())
+        return round((correct_answers/question_number) * 100, 2)
 
