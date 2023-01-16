@@ -12,9 +12,7 @@ router.register(r'groups', GroupViewSet)
     .register(r'questions', QuestionViewSet, basename='quizzes_question', parents_query_lookups=['quiz_id'])
     .register(r'answers', AnswerViewSet, basename='quizzes_questions_answer', parents_query_lookups=['question__quiz_id', 'question_id'])
 )
-(router.register(r'questions', QuestionViewSet)
-    .register(r'answers', AnswerViewSet, basename='quizzes_questions_answer_2', parents_query_lookups=['question_id'])
-)
+router.register(r'questions', QuestionViewSet)
 router.register(r'answers', AnswerViewSet)
 
 urlpatterns = [

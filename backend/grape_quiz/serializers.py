@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from rest_framework.serializers import HyperlinkedModelSerializer, ReadOnlyField
+from rest_framework.serializers import HyperlinkedModelSerializer, ReadOnlyField, HyperlinkedRelatedField, HyperlinkedIdentityField
 from grape_quiz.models import Quiz, Question, Answer
 
 
@@ -15,18 +15,19 @@ class GroupSerializer(HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 
-class QuizSerializer(HyperlinkedModelSerializer):
+class AnswerSerializer(HyperlinkedModelSerializer):
     class Meta:
-        model = Quiz
+        model = Answer
         fields = '__all__'
         lookup_field = 'id'
         extra_kwargs = {
-            'url': {'lookup_field': 'id'}
+            'url': {'lookup_field': 'id'},
+            'question': {'lookup_field': 'id'}
         }
 
 
 class QuestionSerializer(HyperlinkedModelSerializer):
-    quiz_id = ReadOnlyField(source='quiz.id')
+    answers= AnswerSerializer(many=True, read_only=True)
     class Meta:
         model = Question
         fields = '__all__'
@@ -37,13 +38,13 @@ class QuestionSerializer(HyperlinkedModelSerializer):
         }
 
 
-class AnswerSerializer(HyperlinkedModelSerializer):
-    question_id = ReadOnlyField(source='question.id')
+class QuizSerializer(HyperlinkedModelSerializer):
+    questions= QuestionSerializer(many=True, read_only=True)
     class Meta:
-        model = Answer
+        model = Quiz
         fields = '__all__'
         lookup_field = 'id'
         extra_kwargs = {
-            'url': {'lookup_field': 'id'},
-            'question': {'lookup_field': 'id'}
+            'url': {'lookup_field': 'id'}
         }
+
