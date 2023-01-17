@@ -1,6 +1,7 @@
 type TypeAnswerData = {
     id: number;
     name: string;
+    is_correct: boolean
 }
 
 type TypeQuestionData = {

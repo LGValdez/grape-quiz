@@ -70,3 +70,17 @@ class QuizAcknowledgmentSerializer(ModelSerializer):
         correct_answers = sum(int(answer.is_correct) for answer in current_object.user_answers.all())
         return round((correct_answers/question_number) * 100, 2)
 
+
+class AnswerSerializerInQuestionWithAnswers(ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ['id', 'name', 'is_correct']
+
+
+class QuestionSerializerInQuizWithAnswers(QuestionSerializerInQuiz):
+    answers = AnswerSerializerInQuestionWithAnswers(many=True, read_only=True)
+
+
+class QuizSerializerWithAnswers(QuizSerializer):
+    questions = QuestionSerializerInQuizWithAnswers(many=True, read_only=True)
+

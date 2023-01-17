@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import { OutlineButton, BorderedButton }  from '@/components/Buttons/StyledButtons'
 
 
 export default function Home() {
@@ -6,12 +7,8 @@ export default function Home() {
 
   return (
     <>
-      <button type="button" onClick={() => router.push('/QuizList')}>
-        Take a quiz
-      </button>
-      <button type="button" onClick={() => router.push('/QuizResult')}>
-        Check my results
-      </button>
+      <BorderedButton insideText={`Available Quizzes`} onClick={() => router.push('/QuizList')}/>
+      <OutlineButton insideText={`My results`} onClick={() => router.push('/QuizResult')}/>
     </>
   )
 }
