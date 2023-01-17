@@ -15,27 +15,19 @@ class GroupSerializer(HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 
-class AnswerSerializer(HyperlinkedModelSerializer):
+class AnswerSerializer(ModelSerializer):
     class Meta:
         model = Answer
         fields = '__all__'
         lookup_field = 'id'
-        extra_kwargs = {
-            'url': {'lookup_field': 'id'},
-            'question': {'lookup_field': 'id'}
-        }
 
 
-class QuestionSerializer(HyperlinkedModelSerializer):
+class QuestionSerializer(ModelSerializer):
     answers = AnswerSerializer(many=True, read_only=True)
     class Meta:
         model = Question
         fields = '__all__'
         lookup_field = 'id'
-        extra_kwargs = {
-            'url': {'lookup_field': 'id'},
-            'quiz': {'lookup_field': 'id'}
-        }
 
 
 class AnswerSerializerInQuestion(ModelSerializer):
@@ -55,7 +47,7 @@ class QuizSerializer(ModelSerializer):
     questions = QuestionSerializerInQuiz(many=True, read_only=True)
     class Meta:
         model = Quiz
-        fields = ['id', 'user', 'name', 'code', 'questions']
+        fields = '__all__'
         lookup_field = 'id'
 
 

@@ -1,9 +1,10 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import QuizListItem from '../../components/QuizList/QuizListItem';
+import { TypeQuizData } from '@/components/QuizPage/types';
 
 export default function QuizList() {
-    const [quizList, setQuizList] = useState([]);
+    const [quizList, setQuizList] = useState<TypeQuizData[]>([]);
 
     const getQuizData = async () => {
         const { data } = await axios.get(`http://localhost:8000/api/v1/quizzes/`)
@@ -16,14 +17,12 @@ export default function QuizList() {
 
     return (
         <>
-            {quizList.map((quizItem) => {
-                const quizName = quizItem['name']
-                const quizId = quizItem['id']
+            {quizList.map((quizItem: TypeQuizData) => {
                 return <QuizListItem
-                    key={quizId}
-                    quizTitle={quizName}
-                    quizDescription={quizName}
-                    quizId={quizId} />
+                    key={quizItem.id}
+                    quizTitle={quizItem.name}
+                    quizDescription={quizItem.description}
+                    quizId={quizItem.id} />
             })}
         </>
     )

@@ -14,7 +14,10 @@ type TypeQuestionData = {
 type TypeQuizData = {
     id: number;
     name: string;
+    description: string;
     code: string;
+    approveScore: number;
+    quizSize: number;
     questions: TypeQuestionData[];
 }
 
