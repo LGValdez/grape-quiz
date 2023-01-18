@@ -11,7 +11,7 @@ export default function QuizList() {
     const [quizList, setQuizList] = useState<TypeQuizData[]>([]);
 
     const getQuizData = async () => {
-        const { data } = await axios.get(`http://localhost:8000/api/v1/quizzes/`, getAuthHeader())
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quizzes/`, getAuthHeader())
         setQuizList(data.results)
     };
 

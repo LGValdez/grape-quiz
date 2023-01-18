@@ -12,7 +12,7 @@ export default function QuizResult() {
     const [quizResultData, setQuizResultData] = useState<TypeQuizResultFetch[]>([])
 
     const getQuizResultData = async () => {
-        const { data } = await axios.get(`http://localhost:8000/api/v1/quiz-acknowledgement/`, getAuthHeader())
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quiz-acknowledgement/`, getAuthHeader())
         setQuizResultData(data.results)
     };
 

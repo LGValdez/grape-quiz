@@ -9,8 +9,8 @@ export default function QuizResultDetail(props: { quizResultId: number }) {
 
     const getQuizResultData = async () => {
         if (props.quizResultId) {
-            const quizResultResponse = await axios.get(`http://localhost:8000/api/v1/quiz-acknowledgement/${props.quizResultId}/`, getAuthHeader())
-            const quizResponse = await axios.get(`http://localhost:8000/api/v1/quizzes/${quizResultResponse.data.quiz_template}/`, getAuthHeader())
+            const quizResultResponse = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quiz-acknowledgement/${props.quizResultId}/`, getAuthHeader())
+            const quizResponse = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quizzes/${quizResultResponse.data.quiz_template}/`, getAuthHeader())
             const formatDate = new Date(quizResultResponse.data.date)
             setQuizResultData({
                 name: quizResponse.data.name,

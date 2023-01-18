@@ -41,7 +41,7 @@ export default function QuizList() {
 
     const getQuizData = async () => {
         if (quizId) {
-            const { data } = await axios.get(`http://localhost:8000/api/v1/quizzes/${quizId}/`, getAuthHeader())
+            const { data } = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quizzes/${quizId}/`, getAuthHeader())
             const pickedRandomQuestions = getRandom(data.questions, data.quiz_size || DEFAULT_QUIZ_SIZE)
             setRandomQuestionIds(pickedRandomQuestions.map((question) => question.id))
             setQuizData({
@@ -64,7 +64,7 @@ export default function QuizList() {
         if (typeof quizData !== 'undefined') {
             const questionIdList = quizData.questions.map((questionData) => questionData.id)
             const answerIdList = Array.from(answersPicked.values())
-            const response = await axios.post(`http://localhost:8000/api/v1/quiz-acknowledgement/`, {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quiz-acknowledgement/`, {
                 user: 1,
                 quiz_template: quizData.id,
                 instance_questions: questionIdList,
@@ -77,7 +77,7 @@ export default function QuizList() {
     }
 
     const showOneTimeResult = async () => {
-        const { data } = await axios.get(`http://localhost:8000/api/v1/quizzes-answers/${quizId}/`, getAuthHeader())
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quizzes-answers/${quizId}/`, getAuthHeader())
         const randomQuestionsWithAnswers = randomQuestionIds.map((questionId) => data.questions.filter((question: TypeQuestionData) => questionId === question.id)[0])
         setQuizData({
             id: data.id,
