@@ -1,4 +1,5 @@
 from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_extensions.routers import (
     ExtendedDefaultRouter as DefaultRouter
 )
@@ -28,4 +29,5 @@ router.register(r'quiz-acknowledgement', QuizAcknowledgmentViewSet)
 urlpatterns = [
     path('api/v1/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]

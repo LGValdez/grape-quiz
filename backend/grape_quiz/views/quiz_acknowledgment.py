@@ -7,3 +7,4 @@ from grape_quiz.models import QuizAcknowledgment
 class QuizAcknowledgmentViewSet(viewsets.ModelViewSet):
     queryset = QuizAcknowledgment.objects.all().order_by('-date')
     serializer_class = QuizAcknowledgmentSerializer
+    permission_classes = [permissions.IsAuthenticated]

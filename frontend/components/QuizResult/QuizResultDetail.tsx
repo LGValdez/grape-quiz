@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { TypeQuizResultData } from '@/components/QuizResult/type'
+import { getAuthHeader } from '@/nextUtils/authentication'
 
 
 export default function QuizResultDetail(props: { quizResultId: number }) {
@@ -8,8 +9,8 @@ export default function QuizResultDetail(props: { quizResultId: number }) {
 
     const getQuizResultData = async () => {
         if (props.quizResultId) {
-            const quizResultResponse = await axios.get(`http://localhost:8000/api/v1/quiz-acknowledgement/${props.quizResultId}/`)
-            const quizResponse = await axios.get(`http://localhost:8000/api/v1/quizzes/${quizResultResponse.data.quiz_template}/`)
+            const quizResultResponse = await axios.get(`http://localhost:8000/api/v1/quiz-acknowledgement/${props.quizResultId}/`, getAuthHeader())
+            const quizResponse = await axios.get(`http://localhost:8000/api/v1/quizzes/${quizResultResponse.data.quiz_template}/`, getAuthHeader())
             const formatDate = new Date(quizResultResponse.data.date)
             setQuizResultData({
                 name: quizResponse.data.name,
@@ -30,6 +31,6 @@ export default function QuizResultDetail(props: { quizResultId: number }) {
             <h1 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{quizResultData.name}</h1>
             <h3 className="mb-3 font-normal text-gray-700 dark:text-gray-400">{`On: ${quizResultData.date}`}</h3>
             <h3 className="mb-3 font-normal text-gray-700 dark:text-gray-400">{`You got: ${Math.round(quizResultData.score * quizResultData.total_answers / 100)}/${quizResultData.total_answers}`}</h3>
-            <h3 className={`bg-purple-600 font-bold ${(quizResultData.score > quizResultData.approve_score) ? 'text-green-400': 'text-red-900'} py-2 px-4 w-full text-right align-right`}>{`Score: ${quizResultData.score}`}</h3>
+            <h3 className={`bg-purple-600 font-bold ${(quizResultData.score > quizResultData.approve_score) ? 'text-green-400' : 'text-red-900'} py-2 px-4 w-full text-right align-right`}>{`Score: ${quizResultData.score}`}</h3>
         </div>) : <></>
 }

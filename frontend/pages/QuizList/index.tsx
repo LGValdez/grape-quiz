@@ -1,18 +1,26 @@
 import axios from 'axios'
+import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
-import QuizListItem from '../../components/QuizList/QuizListItem';
-import { TypeQuizData } from '@/components/QuizPage/types';
+import QuizListItem from '../../components/QuizList/QuizListItem'
+import { TypeQuizData } from '@/components/QuizPage/types'
+import { getAuthHeader, isAuthenticated } from '@/nextUtils/authentication'
+
 
 export default function QuizList() {
+    const router = useRouter()
     const [quizList, setQuizList] = useState<TypeQuizData[]>([]);
 
     const getQuizData = async () => {
-        const { data } = await axios.get(`http://localhost:8000/api/v1/quizzes/`)
+        const { data } = await axios.get(`http://localhost:8000/api/v1/quizzes/`, getAuthHeader())
         setQuizList(data.results)
     };
 
     useEffect(() => {
-        getQuizData();
+        if (!isAuthenticated()) {
+            router.push('/Login')
+        } else {
+            getQuizData()
+        }
     }, []);
 
     return (

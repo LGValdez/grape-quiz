@@ -8,5 +8,5 @@ from grape_quiz.models import Answer
 class AnswerViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = Answer.objects.all().order_by('id')
     serializer_class = AnswerSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
     lookup_field = 'id'

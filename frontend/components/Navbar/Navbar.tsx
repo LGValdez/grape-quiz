@@ -2,9 +2,12 @@ import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
 import { NavButton } from '../Buttons/StyledButtons'
 import Image from 'next/image'
+import { cleanAuthToken, isAuthenticated } from '@/nextUtils/authentication'
 
 type TypeMobileNavProps = {
     open: boolean;
+    authenticated: boolean;
+    setAuthenticated: (authenticated: boolean) => void;
     setOpen: (open: boolean) => void;
 }
 
@@ -26,6 +29,17 @@ function MobileNav(props: TypeMobileNavProps) {
                     props.setOpen(!props.open)
                     router.push('/QuizResult')
                 }, 100)} />
+                <NavButton insideText={`Log ${(props.authenticated) ? 'Out' : 'In'}`} onClick={() => setTimeout(() => {
+                    if (props.authenticated) {
+                        props.setOpen(!props.open)
+                        cleanAuthToken()
+                        router.push('/')
+                        props.setAuthenticated(false)
+                    } else {
+                        props.setOpen(!props.open)
+                        router.push('/Login')
+                    }
+                }, 100)} />
             </div>
         </div>
     )
@@ -34,9 +48,15 @@ function MobileNav(props: TypeMobileNavProps) {
 export default function Navbar() {
     const router = useRouter()
     const [open, setOpen] = useState(false)
+    const [authenticated, setAuthenticated] = useState<boolean>(false)
+
+    useEffect(() => {
+        setAuthenticated(isAuthenticated())
+    })
+
     return (
         <nav className="flex filter drop-shadow-md bg-white px-4 py-4 h-20 items-center">
-            <MobileNav open={open} setOpen={setOpen} />
+            <MobileNav open={open} setOpen={setOpen} authenticated={authenticated} setAuthenticated={setAuthenticated}/>
             <div className="w-3/12 flex items-center">
                 <a className="text-2xl font-semibold" href="/">
                     <Image src="/grapes.svg" alt="Logo" width="32" height="32" />
@@ -56,6 +76,15 @@ export default function Navbar() {
                 <div className="hidden md:flex">
                     <NavButton insideText={`Available Quizzes`} onClick={() => router.push('/QuizList')} />
                     <NavButton insideText={`My Results`} onClick={() => router.push('/QuizResult')} />
+                    <NavButton insideText={`Log ${(authenticated) ? 'Out' : 'In'}`} onClick={() => {
+                        if (authenticated) {
+                            cleanAuthToken()
+                            router.push('/')
+                            setAuthenticated(false)
+                        } else {
+                            router.push('/Login')
+                        }
+                    }} />
                 </div>
             </div>
         </nav>
