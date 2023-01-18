@@ -90,8 +90,8 @@ export default function QuizList() {
         setDisplayResult(true)
     }
 
-    return (typeof quizData !== 'undefined') ? (<>
-        <h1>{quizData.name}</h1>
+    return (typeof quizData !== 'undefined') ? (<div className='p-10'>
+        <div className='font-bold text-center p-5 text-2xl'>{quizData.name}</div>
         {quizData.questions.map((questionData, index) =>
             <QuestionItem
                 key={questionData.id}
@@ -104,7 +104,7 @@ export default function QuizList() {
             ? <BorderedButton insideText='Submit' onClick={uploadResponse} />
             : <OutlineButton insideText='Verify' onClick={showOneTimeResult} />
         }
-    </>) : <></>
+    </div>) : <></>
 }
 
 export async function getServerSideProps() {

@@ -23,9 +23,9 @@ export default function QuizResultDetail(props: { quizResultId: number }) {
     }, []);
 
     return (typeof quizResultData !== 'undefined')
-        ? (<div>
-            <h1>{quizResultData.name}</h1>
-            <h3>{`You got: ${Math.round(quizResultData.score * quizResultData.total_answers / 100)}/${quizResultData.total_answers}`}</h3>
-            <h3>{`Score: ${quizResultData.score}`}</h3>
+        ? (<div className="p-6 m-5 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+            <h1 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{quizResultData.name}</h1>
+            <h3 className="mb-3 font-normal text-gray-700 dark:text-gray-400">{`You got: ${Math.round(quizResultData.score * quizResultData.total_answers / 100)}/${quizResultData.total_answers}`}</h3>
+            <h3 className="bg-purple-700 text-white py-2 px-4 w-full text-right align-right">{`Score: ${quizResultData.score}`}</h3>
         </div>) : <></>
 }

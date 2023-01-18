@@ -16,7 +16,7 @@ export default function QuizList() {
     }, []);
 
     return (
-        <>
+        <div className='flex flex-wrap mr-8 ml-8'>
             {quizList.map((quizItem: TypeQuizData) => {
                 return <QuizListItem
                     key={quizItem.id}
@@ -24,6 +24,6 @@ export default function QuizList() {
                     quizDescription={quizItem.description}
                     quizId={quizItem.id} />
             })}
-        </>
+        </div>
     )
 }

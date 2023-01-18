@@ -22,9 +22,9 @@ export default function QuestionItem(props: QuestionItemProps) {
         setSelectedId(currentSelectedId);
     };
 
-    return <div>
-        <h3>{props.index}. {props.questionData.name}</h3>
-        <div className="flex flex-wrap flex-col">
+    return <div className="p-2">
+        <div className='font-bold max-w-4xl'>{props.index}. {props.questionData.name}</div>
+        <div className="flex flex-wrap flex-col ml-3">
             {props.questionData.answers.map((answerData) =>{
                 const answerItemProps = {
                     key: answerData.id,

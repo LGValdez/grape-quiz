@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
 import { TypeQuizResultFetch } from '@/components/QuizResult/type'
 import QuizResultDetail from '@/components/QuizResult/QuizResultDetail'
+import { OutlineButton } from '@/components/Buttons/StyledButtons'
 
 
 export default function QuizResult() {
@@ -20,12 +21,12 @@ export default function QuizResult() {
 
     return (
         <>
-            {quizResultData.map((quizResultItem: TypeQuizResultFetch) => {
-                return <QuizResultDetail key={quizResultItem.id} quizResultId={quizResultItem.id}/>
-            })}
-            <button type="button" onClick={() => router.push('/')}>
-                Back
-            </button>
+            <div className='flex flex-wrap'>
+                {quizResultData.map((quizResultItem: TypeQuizResultFetch) => {
+                    return <QuizResultDetail key={quizResultItem.id} quizResultId={quizResultItem.id}/>
+                })}
+            </div>
+            <OutlineButton insideText='Back' onClick={() => router.push('/')}/>
         </>
     )
 }
