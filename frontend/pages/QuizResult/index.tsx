@@ -1,36 +1,48 @@
 import axios from 'axios'
-import { useRouter } from 'next/router'
+import nookies from 'nookies'
+import { NextApiRequest, NextApiResponse } from 'next'
 import React, { useState, useEffect } from 'react'
-import { TypeQuizResultFetch } from '@/components/QuizResult/type'
+import { TypeQuizResultData } from '@/components/QuizResult/type'
 import QuizResultDetail from '@/components/QuizResult/QuizResultDetail'
-import { getAuthHeader } from '@/nextUtils/authentication'
-import { isAuthenticated } from '@/nextUtils/authentication'
+import { AuthService, serverAuthService } from '@/nextUtils/authentication'
 
 
 export default function QuizResult() {
-    const router = useRouter()
-    const [quizResultData, setQuizResultData] = useState<TypeQuizResultFetch[]>([])
+    const [quizResultData, setQuizResultData] = useState<TypeQuizResultData[]>([])
 
     const getQuizResultData = async () => {
-        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quiz-acknowledgement/`, getAuthHeader())
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quiz-acknowledgement/`, AuthService.getAuthHeader())
         setQuizResultData(data.results)
     };
 
     useEffect(() => {
-        if (!isAuthenticated()) {
-            router.push('/Login')
-        } else {
-            getQuizResultData()
-        }
+        getQuizResultData()
     }, []);
 
     return (
         <>
             <div className='flex flex-wrap'>
-                {quizResultData.map((quizResultItem: TypeQuizResultFetch) => {
-                    return <QuizResultDetail key={quizResultItem.id} quizResultId={quizResultItem.id} />
+                {quizResultData.map((quizResultItem: TypeQuizResultData) => {
+                    return <QuizResultDetail key={quizResultItem.id} quizResultFetchedData={quizResultItem}/>
                 })}
             </div>
         </>
     )
+}
+
+
+export async function getServerSideProps(ctx: { req: NextApiRequest, res: NextApiResponse }) {
+    const cookies: { [key: string]: string } = nookies.get(ctx)
+    if (serverAuthService.isAuthenticated(cookies)) {
+        return {
+            props: {}
+        }
+    }
+    return {
+        redirect: {
+            destination: '/Login',
+            permanent: false,
+        },
+        props: {},
+    };
 }

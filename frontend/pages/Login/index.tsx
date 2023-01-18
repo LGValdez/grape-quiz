@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { setAuthToken } from '../../nextUtils/authentication'
+import { AuthService } from '../../nextUtils/authentication'
 
 export default function Login() {
     const router = useRouter()
@@ -14,7 +14,7 @@ export default function Login() {
             password: password
         })
         if (response.status == 200) {
-            setAuthToken(response.data.token)
+            AuthService.setAuthToken(response.data.token)
             router.push('/', undefined, { shallow: true })
         }
     }

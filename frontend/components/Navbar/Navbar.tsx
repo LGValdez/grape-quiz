@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
 import { NavButton } from '../Buttons/StyledButtons'
 import Image from 'next/image'
-import { cleanAuthToken, isAuthenticated } from '@/nextUtils/authentication'
+import { AuthService } from '@/nextUtils/authentication'
 
 type TypeMobileNavProps = {
     open: boolean;
@@ -32,7 +32,7 @@ function MobileNav(props: TypeMobileNavProps) {
                 <NavButton insideText={`Log ${(props.authenticated) ? 'Out' : 'In'}`} onClick={() => setTimeout(() => {
                     if (props.authenticated) {
                         props.setOpen(!props.open)
-                        cleanAuthToken()
+                        AuthService.cleanAuthToken()
                         router.push('/')
                         props.setAuthenticated(false)
                     } else {
@@ -51,7 +51,7 @@ export default function Navbar() {
     const [authenticated, setAuthenticated] = useState<boolean>(false)
 
     useEffect(() => {
-        setAuthenticated(isAuthenticated())
+        setAuthenticated(AuthService.isAuthenticated())
     })
 
     return (
@@ -78,7 +78,7 @@ export default function Navbar() {
                     <NavButton insideText={`My Results`} onClick={() => router.push('/QuizResult')} />
                     <NavButton insideText={`Log ${(authenticated) ? 'Out' : 'In'}`} onClick={() => {
                         if (authenticated) {
-                            cleanAuthToken()
+                            AuthService.cleanAuthToken()
                             router.push('/')
                             setAuthenticated(false)
                         } else {

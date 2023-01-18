@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import QuestionItem from '../../../components/QuizPage/QuestionItem'
 import { TypeQuizData, TypeQuestionData } from '../../../components/QuizPage/types'
 import { OutlineButton, BorderedButton } from '@/components/Buttons/StyledButtons'
-import { getAuthHeader } from '@/nextUtils/authentication'
+import { AuthService } from '@/nextUtils/authentication'
 const DEFAULT_QUIZ_SIZE = 10
 
 
@@ -41,7 +41,7 @@ export default function QuizList() {
 
     const getQuizData = async () => {
         if (quizId) {
-            const { data } = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quizzes/${quizId}/`, getAuthHeader())
+            const { data } = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quizzes/${quizId}/`, AuthService.getAuthHeader())
             const pickedRandomQuestions = getRandom(data.questions, data.quiz_size || DEFAULT_QUIZ_SIZE)
             setRandomQuestionIds(pickedRandomQuestions.map((question) => question.id))
             setQuizData({
@@ -69,7 +69,7 @@ export default function QuizList() {
                 quiz_template: quizData.id,
                 instance_questions: questionIdList,
                 user_answers: answerIdList,
-            }, getAuthHeader())
+            }, AuthService.getAuthHeader())
             if (response.status == 201) {
                 router.push(`/QuizResult/${response.data.id}`)
             }
@@ -77,7 +77,7 @@ export default function QuizList() {
     }
 
     const showOneTimeResult = async () => {
-        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quizzes-answers/${quizId}/`, getAuthHeader())
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quizzes-answers/${quizId}/`, AuthService.getAuthHeader())
         const randomQuestionsWithAnswers = randomQuestionIds.map((questionId) => data.questions.filter((question: TypeQuestionData) => questionId === question.id)[0])
         setQuizData({
             id: data.id,
