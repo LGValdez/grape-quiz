@@ -12,9 +12,6 @@ export default function QuizResult() {
 
     return (<>
         <QuizResultDetail quizResultId={Number(quizResultId)}/>
-        <button type="button" onClick={() => router.push('/')}>
-            Back
-        </button>
     </>
     )
 }

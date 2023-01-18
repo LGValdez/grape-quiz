@@ -1,6 +1,8 @@
 type TypeQuizResultData = {
     name: string,
+    date: string,
     total_answers: number,
+    approve_score: number,
     score: number
 }
 

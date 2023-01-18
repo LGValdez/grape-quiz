@@ -26,7 +26,6 @@ export default function QuizResult() {
                     return <QuizResultDetail key={quizResultItem.id} quizResultId={quizResultItem.id}/>
                 })}
             </div>
-            <OutlineButton insideText='Back' onClick={() => router.push('/')}/>
         </>
     )
 }
