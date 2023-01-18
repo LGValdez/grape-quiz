@@ -1,17 +1,11 @@
 type TypeQuizResultData = {
     id: number,
-    quiz_template: number;
-    instance_questions: number[];
-    name: string,
     date: string,
+    correct_answers: number,
+    total_questions: number,
+    score: number,
     approve_score: number,
-    score: number
+    quiz_name: string,
 }
 
-type TypeQuizResultFetch = {
-    id: number,
-    quiz_template: number;
-    score: number
-}
-
-export type { TypeQuizResultData, TypeQuizResultFetch }
+export type { TypeQuizResultData }

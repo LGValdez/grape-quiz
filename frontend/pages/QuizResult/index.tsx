@@ -11,7 +11,8 @@ export default function QuizResult() {
     const [quizResultData, setQuizResultData] = useState<TypeQuizResultData[]>([])
 
     const getQuizResultData = async () => {
-        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quiz-acknowledgement/`, AuthService.getAuthHeader())
+        const authHeader = AuthService.getAuthHeader()
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_GRAPE_QUIZ_API_URL}quiz-acknowledgement/`, authHeader)
         setQuizResultData(data.results)
     };
 
